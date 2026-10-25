@@ -1,0 +1,376 @@
+HUMAN MODEL PROMPT BUILDER — CONVERSATION CONTEXT
+Date: October 24, 2026
+Purpose: Portable context for continuing this project in a new chat or development workspace.
+
+============================================================
+1. USER'S WORK ENVIRONMENT AND PROBLEM
+============================================================
+The user works at a company that produces AI-generated advertisements for clients. The team uses ChatGPT Plus to generate human model images (female, male, children, and other character types), and uses tools such as Higgsfield to turn generated imagery into AI advertising videos. Seedance was also named as a target video-generation tool in the master template.
+
+Today, the user developed a detailed reusable prompt template for generating photorealistic human-model character reference sheets. Typically, someone creates a new ChatGPT chat, manually edits fields such as gender, age, nationality, body type, skin tone, hair, outfit, and personality, and pastes the long master prompt to generate an image. This is repetitive and prone to inconsistencies.
+
+The user's idea: build a lightweight internal website for colleagues. Instead of editing the lengthy prompt, they use a well-designed configuration form with dropdowns, custom fields, and suitable defaults. The app inserts their choices into the master template and outputs one complete prompt.
+
+============================================================
+2. ORIGINAL INTEGRATION IDEA AND CONSTRAINTS
+============================================================
+Original proposed flow:
+Colleague visits website -> selects character attributes -> backend composes the prompt -> website automatically opens/creates the appropriate chat inside that colleague's designated ChatGPT Project within the company's ChatGPT account -> ChatGPT receives the prompt and generates a character reference image.
+
+The assistant explained that there is no documented public API to programmatically submit messages to arbitrary existing ChatGPT Project conversations from an external website. An OpenAI API-based solution could automate image generation, but API usage is billed separately from ChatGPT Plus and generated output does not automatically appear in ChatGPT Projects. Browser automation/extensions are technically conceivable but fragile and not recommended as a stable production integration. The ChatGPT Apps SDK might be worth future exploration for a UI inside ChatGPT, but it does not guarantee the required ChatGPT Project image-generation workflow.
+
+There was also a caution that sharing one ChatGPT Plus login among colleagues is not a supported account-sharing setup; individual accounts and shared Projects are the more appropriate arrangement.
+
+============================================================
+3. AGREED VERSION 1 / FINAL DECISION
+============================================================
+The user explicitly chose the manual-copy approach (Option A):
+
+1. Colleague opens the internal prompt-builder website.
+2. Colleague chooses attributes using UI controls (dropdowns, text inputs, etc.).
+3. Website assembles the COMPLETE master template with the customized Section 1 configuration.
+4. Colleague reviews the prompt if desired.
+5. Colleague clicks "Copy Prompt".
+6. Colleague manually opens their own chat in the relevant ChatGPT Project.
+7. Colleague pastes the prompt and submits it to ChatGPT to generate the human-model reference image.
+8. If there are reference images, colleague attaches those to the ChatGPT message manually; a text prompt cannot transfer the actual image bytes.
+
+This does NOT require any OpenAI API, ChatGPT integration, AI generation in the website, or backend service. The site can be entirely client-side and deployed as a static website. The user agreed this approach is the best first step.
+
+============================================================
+4. MVP FUNCTIONAL REQUIREMENTS
+============================================================
+- Configuration UI covering all editable character fields of the master template.
+- Dropdowns for categorical choices; numeric field/range for age; text areas for custom specifications, especially wardrobe and additional requirements.
+- AI-selected / automatic defaults where the template permits unspecified details.
+- Conditional/dependent fields (e.g., age-appropriate suggestions for children; hide irrelevant facial-hair controls).
+- Prompt generation by injecting user-selected values into the master template while preserving all 14 sections and the detailed wording/instructions, instead of shortening or paraphrasing the prompt.
+- Live prompt preview.
+- One-click "Copy Prompt" button.
+- Saved configuration presets, initially using local browser storage.
+- Reset to defaults.
+- Optional download of complete prompt as .txt.
+- Reference image roles (face/identity, hairstyle, outfit, accessories, pose/framing) as text instructions in the prompt. Actual reference images are attached manually in ChatGPT.
+- No authentication, user database, backend, API keys, or image-generation integration required for MVP.
+- Suggested tech stack: React + Vite + Tailwind CSS; basic HTML/CSS/JavaScript would also work.
+
+UX suggestion: Use a full configuration page with a settings/form panel and a live preview, rather than putting every selection in a pop-up. Include a clear Copy Prompt action.
+
+Possible future extensions (not part of MVP): saved character IDs and reusable character library, attribute locking across iterations, template versioning, brand/client presets, randomize-character option, optional API-based image generation, and eventual integration with downstream ad/video workflows.
+
+============================================================
+5. ORIGINAL MASTER TEMPLATE (AS SUPPLIED BY USER)
+============================================================
+# MASTER TEMPLATE — HUMAN MODEL GENERATION & MULTI-ANGLE CHARACTER REFERENCE SHEET
+
+## 1. MODEL CONFIGURATION — EDIT THESE FIELDS
+
+**Gender:** [Male / Female / Androgynous / Specify]
+
+**Age:** [Exact intended age or age range]
+
+**Nationality:** [Specify nationality]
+
+**Ethnic or regional appearance:** [Specify if desired; otherwise derive a plausible visual design from the requested character concept without treating appearance as proof of nationality]
+
+**Skin tone:** [Specify, or allow the AI to choose a plausible tone consistent with the requested character]
+
+**Body type:** [Slim / Athletic / Average / Muscular / Plus-size / Specify]
+
+**Height impression:** [Short / Average / Tall / Specify]
+
+**Face type:** [Oval / Round / Square / Heart-shaped / Angular / AI-selected]
+
+**Hair:** [Color, length, texture, hairstyle, hairline; or AI-selected]
+
+**Eye color:** [Specify or AI-selected]
+
+**Facial hair:** [None / Stubble / Mustache / Beard / Specify / Not applicable]
+
+**Makeup and grooming:** [Natural / Minimal / Editorial / Specific details]
+
+**Outfit:** [Describe the exact clothing, colors, fabrics, fit, patterns, and accessories]
+
+**Footwear:** [Specify]
+
+**Accessories:** [Glasses, jewelry, watch, headwear, or none]
+
+**Character personality / visual impression:** [Friendly / Confident / Reserved / Playful / Elegant / Rugged / Professional / Specify]
+
+**Default expression:** [Neutral / Subtle smile / Confident / Specify]
+
+**Additional requirements:** [Optional details]
+
+**Reference images:** [Use uploaded references if provided. Specify what each image controls.]
+
+**Output preference:** One high-resolution image containing a clean, multi-panel collage of the same model from different angles, with multiple facial expressions and clearly separated views.
+
+---
+
+## 2. ROLE
+
+Act as a professional character designer, casting director, fashion photographer, character turnaround artist, portrait photographer, and AI-video character-continuity specialist.
+
+Generate a realistic, production-ready human model reference sheet based on the configuration above.
+
+The result must be a **single image collage**, not a collection of separate image files and not a single portrait.
+
+This reference sheet will be used as a visual identity guide for future AI-generated images, advertisements, and videos using tools such as Higgsfield and Seedance.
+
+Prioritize a recognizable, coherent human identity across every panel.
+
+## 3. CHARACTER DESIGN AND IDENTITY LOCK
+
+Create one specific, visually distinctive person consistent with the model configuration.
+
+Establish a coherent identity before generating the sheet.
+
+Maintain the same:
+
+- Facial geometry, jawline, chin, cheekbones, and forehead
+- Eye shape, eye spacing, eyebrows, nose, and lips
+- Skin tone, complexion, and natural skin texture
+- Apparent age and facial maturity
+- Hairline, hairstyle, hair color, and texture
+- Body type, shoulder width, neck length, and proportions
+- Wardrobe, footwear, jewelry, and accessories
+
+The model must look like the same individual in every panel.
+
+If no reference image is supplied, create an original character consistent with the configuration. If a reference image is supplied, preserve the visible identity and use the written configuration to resolve only those details that the reference does not establish.
+
+Do not silently change a reference person's identity to fit a generic beauty ideal.
+
+## 4. NATIONALITY, AGE, AND APPEARANCE
+
+Use the specified nationality as character background information, not as a rigid facial stereotype.
+
+If the user provides an ethnic or regional appearance, incorporate it respectfully and naturally.
+
+If appearance details are unspecified, create a plausible, coherent character design rather than assuming that all people of a nationality look alike.
+
+Keep the specified age consistent across every panel. Do not make the character appear significantly younger or older in different views.
+
+For adult fashion and commercial models, maintain realistic adult anatomy and proportions. If a minor character is explicitly requested, keep styling and presentation age-appropriate.
+
+## 5. WARDROBE AND STYLING LOCK
+
+Reproduce the configured outfit consistently across all panels.
+
+Preserve:
+
+- Garment type and silhouette
+- Exact specified colors
+- Fabric type and surface texture
+- Collar, neckline, sleeves, and hem
+- Patterns, prints, embroidery, and stitching
+- Garment fit, folds, and draping
+- Footwear and accessories
+
+Do not invent wardrobe changes between angles or expressions.
+
+If a rear view reveals previously unseen clothing details, make them structurally plausible and consistent with the front view.
+
+## 6. SINGLE-IMAGE COLLAGE LAYOUT
+
+Generate one high-resolution image arranged as a clean, professional character-reference contact sheet.
+
+Use a structured grid with clear panel separation, consistent spacing, and a neutral studio background.
+
+Recommended composition: **12 panels arranged in a 4-column × 3-row grid.**
+
+### ROW 1 — PRIMARY IDENTITY AND TURNAROUND
+
+**Panel 1 — Front view:** Straight-on face and upper-body view with a neutral expression.
+
+**Panel 2 — Three-quarter left:** Approximately 45° turn, showing facial depth and cheekbone structure.
+
+**Panel 3 — Left profile:** Approximately 90° side view, clearly showing the nose, jawline, ear, forehead, and hair silhouette.
+
+**Panel 4 — Back view:** Rear view showing the hairstyle, shoulders, and back of the outfit.
+
+### ROW 2 — OPPOSITE ANGLES AND EXPRESSIONS
+
+**Panel 5 — Three-quarter right:** Approximately 45° from the opposite side.
+
+**Panel 6 — Right profile:** Approximately 90° profile from the opposite side.
+
+**Panel 7 — Friendly expression:** Natural, restrained smile with relaxed eyes and cheeks.
+
+**Panel 8 — Confident expression:** Direct gaze, composed posture, and subtle confidence without an exaggerated pose.
+
+### ROW 3 — EXPRESSION RANGE AND FULL-BODY REFERENCE
+
+**Panel 9 — Curious / surprised:** Slightly raised eyebrows, more open eyes, and subtly parted lips. Keep the expression believable.
+
+**Panel 10 — Serious / focused:** Controlled gaze, relaxed but composed mouth, and attentive facial posture.
+
+**Panel 11 — Full-body front view:** Standing naturally, facing forward, showing the complete outfit and footwear.
+
+**Panel 12 — Full-body three-quarter view:** The same person standing at a three-quarter angle, revealing the outfit's depth, fit, and silhouette.
+
+If a particular panel is unsuitable for the configured character, replace it with the nearest useful alternative without changing the overall collage structure.
+
+## 7. CAMERA AND FRAMING
+
+Use realistic professional studio photography.
+
+For facial and upper-body panels:
+
+- Natural portrait-lens perspective
+- Approximately 50–85 mm full-frame equivalent lens appearance
+- Camera near eye level for standard portrait views
+- Consistent head size and framing across comparable panels
+- Sufficient space around the head to preserve hairstyle and facial contours
+
+For full-body panels:
+
+- Show the entire person, including footwear
+- Maintain natural body proportions
+- Use a straight, undistorted perspective
+- Keep the feet and head within the frame
+
+Angle changes must result from the model's physical orientation, not from uncontrolled facial distortion.
+
+Do not confuse camera movement with head rotation. Label the intended view through the actual composition.
+
+## 8. FACIAL EXPRESSION ACCURACY
+
+Each expression panel must show a distinct but believable expression produced by the same face.
+
+Expressions should change through the eyes, eyebrows, mouth, cheeks, and subtle head posture—not through changes to facial anatomy.
+
+Maintain the same:
+
+- Eye shape and spacing
+- Nose and lip structure
+- Jawline and cheekbones
+- Skin texture
+- Age
+- Hairline
+
+Avoid extreme expressions unless specifically requested.
+
+The neutral-expression panels must be suitable for future character identity matching.
+
+## 9. LIGHTING AND BACKGROUND
+
+Use a consistent, neutral studio setup across all panels.
+
+Lighting:
+
+- Soft, diffused key light
+- Gentle fill to preserve facial detail
+- Natural skin highlights
+- Realistic shadows
+- Consistent color temperature
+- No dramatic lighting changes between panels
+
+Background:
+
+- Plain light grey, medium grey, or off-white studio background
+- No scenery or unnecessary props
+- No decorative effects
+- No unrelated objects
+
+The background must not distract from the model.
+
+## 10. REALISM AND IMAGE QUALITY
+
+Target: photorealistic professional casting and fashion-reference photography.
+
+Preserve:
+
+- Realistic skin texture and pores
+- Natural hair strands
+- Believable fabric and stitching
+- Anatomically correct facial features
+- Realistic hands and body proportions
+- Natural light falloff and shadows
+
+Avoid excessive skin retouching, artificial plastic skin, exaggerated symmetry, cartoon styling, illustration, and obvious CGI appearance.
+
+The result should resemble a real model photographed from multiple angles during a controlled studio session.
+
+## 11. REFERENCE IMAGE RULES
+
+When reference images are supplied, assign each image a specific role.
+
+Examples:
+
+- Reference A: Face and identity
+- Reference B: Hairstyle
+- Reference C: Outfit
+- Reference D: Accessories
+- Reference E: Pose or framing
+
+Do not allow a wardrobe reference to overwrite the face identity reference.
+
+If a single image is supplied, use it as the primary reference for all visible characteristics. Do not invent hidden details with unjustified certainty; make reasonable, visually consistent choices where necessary.
+
+## 12. NEGATIVE CONSTRAINTS
+
+Do not produce:
+
+- Different people across panels
+- Facial identity drift
+- Changes to apparent age
+- Unrequested hairstyle or hair-color changes
+- Unrequested outfit changes
+- Inconsistent accessories
+- Distorted facial geometry
+- Unrealistic anatomy
+- Asymmetrical eyes caused by generation errors
+- Plastic skin or excessive beauty retouching
+- Wide-angle facial distortion
+- Missing body parts in full-body views
+- Cropped footwear in full-body panels
+- Inconsistent lighting or background
+- Duplicate or merged panels
+- Unrequested props
+- Watermarks, logos, or decorative typography
+- Text overlays, captions, or labels unless explicitly requested
+
+## 13. PRIORITY ORDER
+
+If requirements conflict, follow this order:
+
+1. Supplied reference identity, if applicable
+2. Configured age and character attributes
+3. Facial consistency across panels
+4. Body proportions and anatomy
+5. Outfit and accessory consistency
+6. Correct viewing angles
+7. Expression variety
+8. Collage layout
+9. Photographic polish
+
+Visual attractiveness must never override identity accuracy.
+
+## 14. FINAL QUALITY-CONTROL CHECKLIST
+
+Before producing the final image, verify:
+
+- All panels depict the same person.
+- The configured gender presentation and age are respected.
+- Nationality is treated as supplied character information, not guessed from appearance.
+- Facial features remain consistent across all angles and expressions.
+- Hair, wardrobe, footwear, and accessories remain consistent.
+- Front, profile, three-quarter, and rear views are represented.
+- Expression panels change emotion without changing identity.
+- At least one full-body view shows the complete outfit.
+- The collage has clear panel separation and a consistent background.
+- The result is useful as a character reference for future AI-generated images and videos.
+
+Generate the final single-image, multi-panel human model reference sheet. Do not substitute a written description for the requested image when image generation is available.
+
+============================================================
+6. NOTES FOR THE NEXT DEVELOPMENT CONVERSATION
+============================================================
+- Build the agreed V1, not automated ChatGPT insertion.
+- Keep Sections 2–14 verbatim as the default locked text and dynamically generate Section 1 from form state.
+- Provide appropriate defaults and customizable/selectable options for every relevant configuration field, including free-text overrides.
+- Display the complete composed prompt, not a short summary.
+- Make copy/paste into the user's own ChatGPT Project the central handoff.
+- Optimize for internal production convenience and character continuity in AI advertisements.
+- Do not assume AI generation is part of the website's MVP.
